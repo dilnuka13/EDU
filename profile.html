@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Setup Profile | DE Edu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sinhala:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecf5f0 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sinhala { 
+            font-family: 'Noto Sinhala', sans-serif; 
+        }
+        
+        /* Header Styles */
+        .gradient-header {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Profile Container */
+        .profile-container {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            border-radius: 0.75rem;
+            overflow: hidden;
+            width: 100%;
+            max-width: 28rem;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Avatar Selection */
+        .avatar-option {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .avatar-option:hover {
+            border-color: #047857;
+        }
+        
+        /* Form Elements */
+        .form-label {
+            display: block;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .form-select:focus {
+            border-color: #047857;
+            box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+        }
+        
+        /* Save Button */
+        .save-btn {
+            width: 100%;
+            background-color: #047857;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+        
+        .save-btn:hover {
+            background-color: #065f46;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="gradient-header">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-center items-center">
+                <div class="animate__animated animate__fadeIn">
+                    <h1 class="text-3xl md:text-4xl font-bold text-center">DE Edu</h1>
+                    <p class="mt-2 text-emerald-100 text-center">Setup your profile</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Profile Content -->
+    <main class="flex-grow container mx-auto px-4 py-8 flex items-center justify-center">
+        <div class="profile-container card-hover animate__animated animate__fadeInUp">
+            <div class="p-8">
+                <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">Setup Your Profile</h2>
+                
+                <!-- Avatar Selection -->
+                <div class="mb-6">
+                    <label class="form-label">Select Avatar</label>
+                    <div class="flex justify-between">
+                        <img src="avatar1.png" class="avatar-option" data-avatar="1">
+                        <img src="avatar2.png" class="avatar-option" data-avatar="2">
+                        <img src="avatar3.png" class="avatar-option" data-avatar="3">
+                        <img src="avatar4.png" class="avatar-option" data-avatar="4">
+                    </div>
+                </div>
+
+                <!-- Stream Selection -->
+                <div class="mb-6">
+                    <label class="form-label">Select Your Stream</label>
+                    <select id="streamSelect" class="form-select">
+                        <option value="science">Science Stream</option>
+                        <option value="technology">Technology Stream</option>
+                        <option value="commerce">Commerce Stream</option>
+                        <option value="arts">Arts Stream</option>
+                    </select>
+                </div>
+
+                <button onclick="saveProfile()" class="save-btn">
+                    Save Profile
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="gradient-header text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold">DE Edu</h3>
+                    <p class="text-emerald-100 mt-1">© 2025 A/L Past Papers. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="index.html" class="text-emerald-100 hover:text-white transition-colors">Home</a>
+                    <a href="contact.html" class="text-emerald-100 hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6yXDHsOaqVplfhsXZV8nWvMuioDulwYg",
+            authDomain: "edu-login-4d05f.firebaseapp.com",
+            projectId: "edu-login-4d05f",
+            storageBucket: "edu-login-4d05f.firebasestorage.app",
+            messagingSenderId: "197092856272",
+            appId: "1:197092856272:web:a00b0169e46e7d5acca9d5",
+            measurementId: "G-TM21CT4GJ9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        let selectedAvatar = 1;
+
+        // Select avatar
+        document.querySelectorAll('.avatar-option').forEach(avatar => {
+            avatar.addEventListener('click', function() {
+                document.querySelectorAll('.avatar-option').forEach(a => {
+                    a.classList.remove('border-emerald-500');
+                    a.classList.add('border-transparent');
+                });
+                this.classList.add('border-emerald-500');
+                this.classList.remove('border-transparent');
+                selectedAvatar = this.dataset.avatar;
+            });
+        });
+
+        function saveProfile() {
+            const user = firebase.auth().currentUser;
+            const stream = document.getElementById('streamSelect').value;
+            
+            if (user) {
+                db.collection("users").doc(user.uid).set({
+                    avatar: selectedAvatar,
+                    stream: stream,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                })
+                .then(() => {
+                    window.location.href = "dashboard.html";
+                })
+                .catch((error) => {
+                    alert("Error saving profile: " + error.message);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

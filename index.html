@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="pageTitle">DE Edu | HOME</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sinhala:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecf5f0 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sinhala { 
+            font-family: 'Noto Sinhala', sans-serif; 
+        }
+        
+        /* Header Styles */
+        .gradient-header {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Card Styles */
+        .stream-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .stream-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Icon Container */
+        .icon-container {
+            background-color: #ecfdf5;
+            padding: 0.75rem;
+            border-radius: 9999px;
+            margin-right: 1rem;
+        }
+        
+        /* Explore Button */
+        .explore-btn {
+            width: 100%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        /* Pulse Animation */
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Login/Profile Buttons */
+        .auth-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .login-btn {
+            background-color: #047857;
+            color: white;
+        }
+        
+        .login-btn:hover {
+            background-color: #065f46;
+        }
+        
+        .profile-btn {
+            background-color: white;
+            color: #047857;
+            margin-left: 0.5rem;
+        }
+        
+        .profile-btn:hover {
+            background-color: #f0fdf4;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="gradient-header">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div class="animate__animated animate__fadeInLeft">
+                    <h1 class="text-3xl md:text-4xl font-bold" id="headerTitle">A/L Past Papers & Marking Schemes</h1>
+                    <p class="mt-2 text-emerald-100" id="headerSubtitle">Access all past papers and marking schemes in one place</p>
+                </div>
+                <div class="flex items-center">
+                    <a id="loginBtn" href="login.html" class="auth-btn login-btn">Login</a>
+                    <a id="profileBtn" href="dashboard.html" class="auth-btn profile-btn hidden">My Profile</a>
+                </div>
+            </div>
+            
+            <!-- Rest of your index.html content remains the same -->
+        </div>
+    </header>
+
+    <!-- Rest of your index.html content -->
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6yXDHsOaqVplfhsXZV8nWvMuioDulwYg",
+            authDomain: "edu-login-4d05f.firebaseapp.com",
+            projectId: "edu-login-4d05f",
+            storageBucket: "edu-login-4d05f.firebasestorage.app",
+            messagingSenderId: "197092856272",
+            appId: "1:197092856272:web:a00b0169e46e7d5acca9d5",
+            measurementId: "G-TM21CT4GJ9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // Check auth state
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // User is logged in, show profile button
+                document.getElementById('loginBtn').classList.add('hidden');
+                document.getElementById('profileBtn').classList.remove('hidden');
+            } else {
+                // User is not logged in, show login button
+                document.getElementById('loginBtn').classList.remove('hidden');
+                document.getElementById('profileBtn').classList.add('hidden');
+            }
+        });
+
+        // Rest of your existing index.html script
+    </script>
+</body>
+</html>

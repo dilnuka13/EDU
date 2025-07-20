@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | DE Edu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sinhala:wght@400;700&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <style>
+        /* Base Styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecf5f0 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sinhala { 
+            font-family: 'Noto Sinhala', sans-serif; 
+        }
+        
+        /* Header Styles */
+        .gradient-header {
+            background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+            color: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* User Profile */
+        .user-avatar {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            margin-right: 0.5rem;
+        }
+        
+        /* Logout Button */
+        .logout-btn {
+            background-color: #dc2626;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-left: 1rem;
+        }
+        
+        .logout-btn:hover {
+            background-color: #b91c1c;
+        }
+        
+        /* Stream Content */
+        .stream-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #064e3b;
+        }
+        
+        /* Resource Cards */
+        .resource-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            transition: all 0.3s;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .resource-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #064e3b;
+        }
+        
+        .resource-link {
+            color: #047857;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .resource-link:hover {
+            color: #065f46;
+        }
+        
+        /* Grid Layout */
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            gap: 1.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .resource-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 1024px) {
+            .resource-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="gradient-header">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold">A/L Past Papers</h1>
+                </div>
+                <div class="flex items-center">
+                    <img id="userAvatar" src="avatar1.png" class="user-avatar">
+                    <span id="userName" class="font-medium"></span>
+                    <button onclick="logout()" class="logout-btn">
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <h2 class="stream-title" id="streamTitle">Your Stream Content</h2>
+        
+        <!-- Stream specific content will be loaded here -->
+        <div id="streamContent" class="resource-grid">
+            <!-- Content will be dynamically loaded -->
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="gradient-header text-white py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-xl font-bold">DE Edu</h3>
+                    <p class="text-emerald-100 mt-1">© 2025 A/L Past Papers. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="index.html" class="text-emerald-100 hover:text-white transition-colors">Home</a>
+                    <a href="contact.html" class="text-emerald-100 hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyD6yXDHsOaqVplfhsXZV8nWvMuioDulwYg",
+            authDomain: "edu-login-4d05f.firebaseapp.com",
+            projectId: "edu-login-4d05f",
+            storageBucket: "edu-login-4d05f.firebasestorage.app",
+            messagingSenderId: "197092856272",
+            appId: "1:197092856272:web:a00b0169e46e7d5acca9d5",
+            measurementId: "G-TM21CT4GJ9"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+        
+        let userStream = '';
+
+        // Check auth state
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                // Load user profile
+                loadUserProfile(user.uid);
+            } else {
+                // Redirect to login if not authenticated
+                window.location.href = "login.html";
+            }
+        });
+
+        function loadUserProfile(uid) {
+            db.collection("users").doc(uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const userData = doc.data();
+                        userStream = userData.stream;
+                        
+                        // Set avatar
+                        document.getElementById('userAvatar').src = `avatar${userData.avatar}.png`;
+                        
+                        // Set stream title
+                        document.getElementById('streamTitle').textContent = 
+                            `${userData.stream.charAt(0).toUpperCase() + userData.stream.slice(1)} Stream Resources`;
+                        
+                        // Load stream specific content
+                        loadStreamContent(userData.stream);
+                    }
+                });
+        }
+
+        function loadStreamContent(stream) {
+            // This would be replaced with actual content loading from your database
+            const content = {
+                science: [
+                    { title: "Combined Mathematics", link: "math.html" },
+                    { title: "Chemistry", link: "chemistry.html" },
+                    { title: "Physics", link: "physics.html" },
+                    { title: "Biology", link: "biology.html" }
+                ],
+                technology: [
+                    { title: "Engineering Technology", link: "eng-tech.html" },
+                    { title: "ICT", link: "ict.html" },
+                    { title: "Bio Systems Technology", link: "bio-tech.html" }
+                ],
+                commerce: [
+                    { title: "Accounting", link: "accounting.html" },
+                    { title: "Business Studies", link: "business.html" },
+                    { title: "Economics", link: "economics.html" }
+                ],
+                arts: [
+                    { title: "Sinhala", link: "sinhala.html" },
+                    { title: "History", link: "history.html" },
+                    { title: "Political Science", link: "political-science.html" }
+                ]
+            };
+
+            const container = document.getElementById('streamContent');
+            container.innerHTML = '';
+            
+            content[stream].forEach(item => {
+                container.innerHTML += `
+                    <div class="resource-card">
+                        <h3 class="resource-title">${item.title}</h3>
+                        <a href="${item.link}" class="resource-link">View Resources</a>
+                    </div>
+                `;
+            });
+        }
+
+        function logout() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = "login.html";
+            });
+        }
+    </script>
+</body>
+</html>
